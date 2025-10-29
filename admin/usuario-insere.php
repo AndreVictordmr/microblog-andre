@@ -1,5 +1,6 @@
 <?php 
 require_once "../src/Model/Usuario.php";
+require_once "../src/Helpers/Utils.php";
 
 //Vareiavel que sera usada para montar mensagens de erros personalizadas
 $erro = null;
@@ -9,7 +10,21 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 	if(empty($_POST['nome'])||empty($_POST['senha'])||empty($_POST['email'])||empty($_POST['tipo'])){
 		$erro = "Preencha todos os campos";
 	}else{
-		echo "campos ok";
+		// Capturando e sanitizando os valores do formulario
+		$nome=Utils::sanitizar($_POST['nome']);
+		$tipo=Utils::sanitizar($_POST['tipo']);
+		$email=Utils::sanitizar($_POST['email'],'email');
+		
+		// Capturando e codificando(Gerando um hash da senha)
+		$senha=Utils::codificarSenha($_POST['senha']);
+
+		// Criando um objeto para um novo usuario com seus dados
+		$novoUsuario=new Usuario($nome,$email,$senha,$tipo);
+		
+		
+		//teste do objeto;
+		Utils::testarCoisa($novoUsuario);
+		
 	}
 	
 }
