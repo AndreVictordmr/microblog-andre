@@ -36,12 +36,12 @@ require_once "../includes/cabecalho-admin.php";
 
 			<div class="mb-3">
 				<label class="form-label" for="nome">Nome:</label>
-				<input class="form-control" type="text" id="nome" name="nome">
+				<input class="form-control" type="text" id="nome" name="nome" value="<?=$_POST['nome']??''?>">
 			</div>
 
 			<div class="mb-3">
 				<label class="form-label" for="email">E-mail:</label>
-				<input class="form-control" type="email" id="email" name="email">
+				<input class="form-control" type="email" id="email" name="email" value="<?=$_POST['email']??''?>">
 			</div>
 
 			<div class="mb-3">
