@@ -24,4 +24,8 @@ class Utils{
         echo "</pre>";
     }
 
+    public static function redirecionePara(string $valor):void{
+        header("location:$valor.php");
+        exit;
+    }
 }
