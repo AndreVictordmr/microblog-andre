@@ -14,22 +14,27 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 	if(empty($_POST['nome'])||empty($_POST['senha'])||empty($_POST['email'])||empty($_POST['tipo'])){
 		$erro = "Preencha todos os campos";
 	}else{
-		// Capturando e sanitizando os valores do formulario
-		$nome=Utils::sanitizar($_POST['nome']);
-		$tipo=Utils::sanitizar($_POST['tipo']);
-		$email=Utils::sanitizar($_POST['email'],'email');
-		
-		// Capturando e codificando(Gerando um hash da senha)
-		$senha=Utils::codificarSenha($_POST['senha']);
+		try {
+			// Capturando e sanitizando os valores do formulario
+			$nome=Utils::sanitizar($_POST['nome']);
+			$tipo=Utils::sanitizar($_POST['tipo']);
+			$email=Utils::sanitizar($_POST['email'],'email');
+			
+			// Capturando e codificando(Gerando um hash da senha)
+			$senha=Utils::codificarSenha($_POST['senha']);
 
-		// Criando um objeto para um novo usuario com seus dados
-		$novoUsuario=new Usuario($nome,$email,$senha,$tipo);
-				
-		// Executar o serviço e passar os novos dados
-		$usuarioServico->inserir($novoUsuario);
+			// Criando um objeto para um novo usuario com seus dados
+			$novoUsuario=new Usuario($nome,$email,$senha,$tipo);
+					
+			// Executar o serviço e passar os novos dados
+			$usuarioServico->inserir($novoUsuario);
 
-		header("location:usuarios.php");
-		exit;
+			header("location:usuarios.php");
+			exit;
+		} catch (Throwable $e) {
+			/* Se alguma ação dentro do try falhar, o php vai lançar(usando a classe Trowable) um erro/execeção. Ao usar o parametro 'e' (ou outro nome),temos acesso aos detalhes do que aconteceu */
+			$erro = "Erro ao inserir usuario.". $e->getMessage();
+		}
 	}
 	
 }
