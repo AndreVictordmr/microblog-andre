@@ -20,4 +20,10 @@ class UsuarioServico{
         $conexao->execute();
         
     }
+    // buscar(SELECT)
+    public function buscar():array{
+        $sql ="SELECT * FROM USUARIO ORDER BY nome";
+        $conexao=$this->conexao->query($sql);
+        return $conexao->fetchAll();
+    }
 }
