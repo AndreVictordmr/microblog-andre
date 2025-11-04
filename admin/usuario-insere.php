@@ -1,9 +1,13 @@
 <?php 
+require_once "../src/Database/Conecta.php";
 require_once "../src/Model/Usuario.php";
+require_once "../src/Services/UsuarioServico.php";
 require_once "../src/Helpers/Utils.php";
 
 //Vareiavel que sera usada para montar mensagens de erros personalizadas
 $erro = null;
+// Inicializando um objeto de serviço para o CRUD dos Usuarios 
+$usuarioServico = new UsuarioServico();
 
 if($_SERVER['REQUEST_METHOD']==='POST'){
 	// Validação do prenchimento dos campos
@@ -20,11 +24,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
 		// Criando um objeto para um novo usuario com seus dados
 		$novoUsuario=new Usuario($nome,$email,$senha,$tipo);
-		
-		
-		//teste do objeto;
-		Utils::testarCoisa($novoUsuario);
-		
+				
+		// Executar o serviço e passar os novos dados
+		$usuarioServico->inserir($novoUsuario);
+
+		header("location:usuarios.php");
+		exit;
 	}
 	
 }

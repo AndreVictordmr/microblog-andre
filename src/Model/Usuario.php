@@ -19,8 +19,13 @@ class Usuario{
     }
 
     private function setNome(string $valor):void{$this->nome=$valor;}
+    public function getNome():string{return $this->nome;}
     private function setEmail(string $valor):void{$this->email=$valor;}
+    public function getEmail():string{return $this->email;}
     private function setSenha(string $valor):void{$this->senha=$valor;}
+    public function getSenha():string{return $this->senha;}
     private function setTipo(string $valor):void{$this->tipo=$valor;}
+    public function getTipo():string{return $this->tipo;}
     private function setId(?int $valor):void{$this->id=$valor;}
+    public function getId():?int{return $this->id;}
 }
