@@ -12,18 +12,47 @@ class UsuarioServico{
     //inserir (INSERT)
     public function inserir(Usuario $dados):void{
         $sql = "INSERT INTO USUARIO(nome,email,tipo,senha) VALUES(:nome,:email,:tipo,:senha)";
-        $conexao=$this->conexao->prepare($sql);
-        $conexao->bindValue(':nome',$dados->getNome());
-        $conexao->bindValue(':email',$dados->getEmail());
-        $conexao->bindValue(':tipo',$dados->getTipo());
-        $conexao->bindValue(':senha',$dados->getSenha());
-        $conexao->execute();
+        $pega=$this->conexao->prepare($sql);
+        $pega->bindValue(':nome',$dados->getNome());
+        $pega->bindValue(':email',$dados->getEmail());
+        $pega->bindValue(':tipo',$dados->getTipo());
+        $pega->bindValue(':senha',$dados->getSenha());
+        $pega->execute();
         
     }
     // buscar(SELECT)
     public function buscar():array{
         $sql ="SELECT * FROM USUARIO ORDER BY nome";
-        $conexao=$this->conexao->query($sql);
-        return $conexao->fetchAll();
+        $pega=$this->conexao->query($sql);
+        return $pega->fetchAll();
+    }
+    // buscarId(select/where)
+    public function buscarId(INT $valor):?array{
+        $sql ="SELECT * FROM USUARIO WHERE ID=:id";
+        $pega=$this->conexao->prepare($sql);
+        $pega->bindValue(":id",$valor);
+        $pega->execute();
+
+        /* Sobre '?:' conhecido como "Elvis Operator" É uma condicional simplificada/abreviada em que, se a condição/expressão for válida(ou seja, tem dados), ela mesma é retornada, Caso contrario, é retornado null*/
+        return $pega->fetch() ?: null;
+    }
+
+    // AtualizarId(UPDATE)
+    public function atualizar(Usuario $dado):void{
+        $sql="UPDATE USUARIO SET NOME=:nome, EMAIL=:email, TIPO=:tipo, SENHA=:senha WHERE ID=:id ";
+        $pega=$this->conexao->prepare($sql);
+        $pega->bindValue(':nome',$dado->getNome());
+        $pega->bindValue(':email',$dado->getEmail());
+        $pega->bindValue(':tipo',$dado->getTipo());
+        $pega->bindValue(':senha',$dado->getSenha());
+        $pega->bindValue(':id',$dado->getId());
+        $pega->execute();
+    }
+
+    public function excluir(int $valor){
+        $sql ="DELETE FROM USUARIO WHERE ID=:id";
+        $pega=$this->conexao->prepare($sql);
+        $pega->bindValue(':id',$valor);
+        $pega->execute();
     }
 }

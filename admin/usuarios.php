@@ -72,7 +72,7 @@ require_once "../includes/cabecalho-admin.php";
 	</article>
 </div>
 
-
+<script src="../js/confimar_exclusao.js"></script>
 <?php 
 require_once "../includes/rodape-admin.php";
 ?>

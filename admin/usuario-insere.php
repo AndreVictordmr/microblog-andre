@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 			// Executar o serviço e passar os novos dados
 			$usuarioServico->inserir($novoUsuario);
 
-			Utils::redirecionePara('usuarios');
+			Utils::redirecionePara('usuarios.php');
 		} catch (Throwable $e) {
 			/* Se alguma ação dentro do try falhar, o php vai lançar(usando a classe Trowable) um erro/execeção. Ao usar o parametro 'e' (ou outro nome),temos acesso aos detalhes do que aconteceu */
 			$erro = "Erro ao inserir usuario.<br>". $e->getMessage();

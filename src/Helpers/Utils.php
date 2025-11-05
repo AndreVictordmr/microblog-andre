@@ -25,7 +25,18 @@ class Utils{
     }
 
     public static function redirecionePara(string $valor):void{
-        header("location:$valor.php");
+        header("location:$valor");
         exit;
+    }
+    /* Ao chamar o método verificarSenha, passamos pra ele a senha digitada no formulario e a senha existente no bando */
+    public static function verificarSenha(string $senhaNova,string $senhaAnterior):string{
+        /* Usamos o password_verify para COMPARAR as duas senhas. */
+        if(password_verify($senhaNova,$senhaAnterior)){
+           // Caso elas sejam iguais retornamos a senha ja cadastrada
+            return $senhaAnterior;
+        }else{
+            // caso sejam diferentes entao codificamos a nova senha
+            return self::codificarSenha($senhaNova);
+        }
     }
 }
