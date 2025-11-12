@@ -11,19 +11,29 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     if(empty($_POST['email'])||empty($_POST['senha'])){
         Utils::redirecionePara("login.php?campos_obrigatorios");
     }else{
-        try {    
+      
         //Captura email e senha 
-        $email = $_POST['email'];
+        $email =Utils::sanitizar( $_POST['email'],"email");
         $senha = $_POST['senha'];    
         //Busca pelo usuaario atraves do email 
-
+        $verificar=$usuarioServico->verificarEmail($email);
         // se nao existir usuario/usuario invalido, redirecione para login
+        if(!$verificar){
+            Utils::redirecionePara("login.php?dados_incorretos");
+        }else{   
+            // Caso contrario, verifique a senha
+            if(password_verify($senha,$verificar['SENHA']) ){
+                // Estanto correto, faça o login
+                echo "👌";
+            }else{
+                // estando errada, mantenha em login.php
+                Utils::redirecionePara("login.php?dados_incorretos");
 
-        // Caso contrario, verifique a senha
-        // estando errada, mantenha em login.php
-        } catch (\Throwable $th) {
-            //throw $th;
+            }
+
+            
         }
+     
     }
 }
 
@@ -34,6 +44,8 @@ if(isset($_GET['acesso_proibido'])){
     $mensage = "Você deve logar primeiro";
 }elseif(isset($_GET['campos_obrigatorios'])){
     $mensage = "E-mail e Senha devem ser preenchidos ";
+}elseif(isset($_GET['dados_incorretos'])){
+    $mensage = "E-mail/Senha errados";
 }
 require_once "includes/cabecalho.php";
 ?>

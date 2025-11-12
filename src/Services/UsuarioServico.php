@@ -55,4 +55,13 @@ class UsuarioServico{
         $pega->bindValue(':id',$valor, PDO::PARAM_INT);
         $pega->execute();
     }
+
+    // verificarEmail (SELECT)
+    public function verificarEmail(string $valor):?array{
+        $sql = "SELECT * from USUARIO where EMAIL = :email";
+        $pega = $this->conexao->prepare($sql);
+        $pega->bindValue(':email',$valor);
+        $pega->execute();
+        return $pega->fetch()?:null;
+    }
 }
