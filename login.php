@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             // Caso contrario, verifique a senha
             if(password_verify($senha,$verificar['SENHA']) ){
                 // Estanto correto, faça o login
-                echo "👌";
+                AutenticacaoServico::login($verificar['ID'],$verificar['NOME'],$verificar['SENHA']);
             }else{
                 // estando errada, mantenha em login.php
                 Utils::redirecionePara("login.php?dados_incorretos");
@@ -46,6 +46,8 @@ if(isset($_GET['acesso_proibido'])){
     $mensage = "E-mail e Senha devem ser preenchidos ";
 }elseif(isset($_GET['dados_incorretos'])){
     $mensage = "E-mail/Senha errados";
+}elseif(isset($_GET['saiu'])){
+    $mensage = "Sessao Encerrada";
 }
 require_once "includes/cabecalho.php";
 ?>
