@@ -11,7 +11,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     if(empty($_POST['email'])||empty($_POST['senha'])){
         Utils::redirecionePara("login.php?campos_obrigatorios");
     }else{
-        echo "Tudo preenchido!";
+        try {    
+        //Captura email e senha 
+        $email = $_POST['email'];
+        $senha = $_POST['senha'];    
+        //Busca pelo usuaario atraves do email 
+
+        // se nao existir usuario/usuario invalido, redirecione para login
+
+        // Caso contrario, verifique a senha
+        // estando errada, mantenha em login.php
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }
 
