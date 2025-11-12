@@ -1,9 +1,29 @@
 <?php
-require_once "includes/cabecalho.php";
+require_once "src/Database/Conecta.php";
+require_once "src/Services/UsuarioServico.php";
+require_once "src/Helpers/Utils.php";
+require_once "src/Services/AutenticacaoServico.php";
+
+$usuarioServico= new UsuarioServico();
+
+
+if($_SERVER['REQUEST_METHOD']==='POST'){
+    if(empty($_POST['email'])||empty($_POST['senha'])){
+        Utils::redirecionePara("login.php?campos_obrigatorios");
+    }else{
+        echo "Tudo preenchido!";
+    }
+}
+
+
+
 
 if(isset($_GET['acesso_proibido'])){
     $mensage = "Você deve logar primeiro";
+}elseif(isset($_GET['campos_obrigatorios'])){
+    $mensage = "E-mail e Senha devem ser preenchidos ";
 }
+require_once "includes/cabecalho.php";
 ?>
 
 <div class="row">
@@ -12,7 +32,7 @@ if(isset($_GET['acesso_proibido'])){
 
         <form action="" method="post" id="form-login" name="form-login" class="mx-auto w-50" autocomplete="off">
 		<?php if(isset($mensage)){ ?>
-			<p class="alert alert-warnign text-center my-2"><?=$mensage?></p>
+			<p class="alert alert-warning text-center my-2"><?=$mensage?></p>
 		<?php } ?>
 
             <div class="mb-3">
