@@ -1,5 +1,9 @@
-<?php 
+<?php
 require_once "includes/cabecalho.php";
+
+if(isset($_GET['acesso_proibido'])){
+    $mensage = "Você deve logar primeiro";
+}
 ?>
 
 <div class="row">
@@ -7,7 +11,9 @@ require_once "includes/cabecalho.php";
         <h2 class="text-center fw-light">Acesso à área administrativa</h2>
 
         <form action="" method="post" id="form-login" name="form-login" class="mx-auto w-50" autocomplete="off">
-			
+		<?php if(isset($mensage)){ ?>
+			<p class="alert alert-warnign text-center my-2"><?=$mensage?></p>
+		<?php } ?>
 
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail:</label>

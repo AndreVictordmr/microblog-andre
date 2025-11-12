@@ -52,7 +52,7 @@ class UsuarioServico{
     public function excluir(int $valor){
         $sql ="DELETE FROM USUARIO WHERE ID=:id";
         $pega=$this->conexao->prepare($sql);
-        $pega->bindValue(':id',$valor);
+        $pega->bindValue(':id',$valor, PDO::PARAM_INT);
         $pega->execute();
     }
 }
