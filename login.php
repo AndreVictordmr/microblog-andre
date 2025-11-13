@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             // Caso contrario, verifique a senha
             if(password_verify($senha,$verificar['SENHA']) ){
                 // Estanto correto, faça o login
-                AutenticacaoServico::login($verificar['ID'],$verificar['NOME'],$verificar['SENHA']);
+                AutenticacaoServico::login($verificar['ID'],$verificar['NOME'],$verificar['TIPO']);
             }else{
                 // estando errada, mantenha em login.php
                 Utils::redirecionePara("login.php?dados_incorretos");

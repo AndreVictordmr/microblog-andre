@@ -6,7 +6,7 @@ require_once "../src/Helpers/Utils.php";
 require_once "../src/Services/AutenticacaoServico.php";
 
 AutenticacaoServico::exigirLogin();
-
+AutenticacaoServico::exigirAdmin();
 $id=Utils::sanitizar($_GET['id'],'inteiro');
 //Se não houver um id valido na URL, faça voltar para a página usuarios
 if(!$id) Utils::redirecionePara('usuarios.php');

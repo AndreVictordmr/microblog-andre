@@ -6,7 +6,7 @@ require_once "../src/Helpers/Utils.php";
 require_once "../src/Services/AutenticacaoServico.php";
 
 AutenticacaoServico::exigirLogin();
-
+AutenticacaoServico::exigirAdmin();
 //Vareiavel que sera usada para montar mensagens de erros personalizadas
 $erro = null;
 // Inicializando um objeto de serviço para o CRUD dos Usuarios 
