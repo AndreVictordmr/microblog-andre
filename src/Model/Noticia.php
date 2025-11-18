@@ -1,5 +1,5 @@
-Geral Classe Modelo Noticia.php 
 <?php class Noticia { 
+    //Geral Classe Modelo Noticia.php 
     private ?int $id;
     private ?string $data;
     private string $titulo; 
