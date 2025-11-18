@@ -14,14 +14,18 @@ $erro = null;
 $sucesso = null;
 $srevice = new UsuarioServico();
 
-try {
-	$srevice->excluir($id);
+	
+if($id === $_SESSION['id']){
+	$erro= "Você não pode excluir seu prorpio usuario";
+}else{
+	try {
+		$srevice->excluir($id);
 
-	$sucesso="Usuário excluido com sucesso";
-} catch (\Throwable $e) {
-	$erro = "Erro ao exclur usuario". $e->getMessage();
+		$sucesso="Usuário excluido com sucesso";
+	} catch (\Throwable $e) {
+		$erro = "Erro ao exclur usuario". $e->getMessage();
+	}
 }
-
 require_once "../includes/cabecalho-admin.php";
 ?>
 
