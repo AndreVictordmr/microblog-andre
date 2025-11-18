@@ -5,12 +5,14 @@ class NoticiaServico{
 
     public function __construct()
     {
-        $conexao = Conecta::getConexao();
+        $this->conexao = Conecta::getConexao();
     }
 
     public function buscar():array{
-        $sql = "SELECT * from noticia ORDER BY DATA DESC.";
+        $sql = "SELECT noticia.id, noticia.titulo, noticia.data, usuario.nome as autor from noticia join usuario on noticia.usuario_id = usuario.id  ORDER BY DATA DESC";
         $pega = $this->conexao->query($sql);
         return $pega->fetchAll();
     }
+
+
 }
