@@ -1,6 +1,8 @@
 <?php
 require_once "../src/Database/Conecta.php";
+require_once "../src/Model/Noticia.php";
 require_once "../src/Helpers/Utils.php";
+require_once "../src/Services/NoticiaServico.php";
 require_once "../src/Services/AutenticacaoServico.php";
 
 AutenticacaoServico::exigirLogin();
@@ -15,7 +17,9 @@ require_once "../includes/cabecalho-admin.php";
         <h2 class="text-center">
             Atualizar dados da notícia
         </h2>
-
+		<?php if($erro){ ?>
+			<p class="alert alert-danger text-center"><?=$erro?></p>
+		<?php } ?>
         <form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="form-atualizar" autocomplete="off">
             <input type="hidden" name="id" value="id da notícia...">
 

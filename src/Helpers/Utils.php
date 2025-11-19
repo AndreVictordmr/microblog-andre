@@ -45,21 +45,32 @@ class Utils{
     }
 
     public static function upload(?array $arquivo): void {
-        
+        /*Validaçao inicial, verifica se:
+            - Não tem arquivo
+            - Não existe alguma referencia na area temporaria
+            - Não for um arquivo que possa/permita envio/upload */
         if (!$arquivo || !isset($arquivo["tmp_name"]) ||!is_uploaded_file($arquivo["tmp_name"]) ) {
             throw new Exception("Nenhum arquivo válido foi enviado.");
         }
+        // Definimos uma pasta no servidor/site para receber a imagem enviada
         $pastaDeDestino = "../images/";
+        //Validação dos formados de imagems
         $formatosPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+        //Defenimos o tamanho maximo pra imagens
         $tamanhoMaximo = 2 * 1024 * 1024; // 2MB
+        //Detectando o formato real do arquivo
         $formatoDoArquivoEnviado = mime_content_type($arquivo["tmp_name"]);
+        // Se o formato não estiver na lista permitida ele da erro
         if (!in_array($formatoDoArquivoEnviado, $formatosPermitidos)) {
             throw new Exception("Apenas arquivos JPG, PNG, GIF e SVG são permitidos.");
         }
+        // Se o tamanho do arquivo enviado for acima do enviado da erro
         if ($arquivo["size"] > $tamanhoMaximo) {
             throw new Exception("O arquivo é muito grande. Tamanho máximo: 2MB.");
         }
+        //nesta momento criamos o nome do caminho que sera guardado na pasta
         $nomeDoArquivo = $pastaDeDestino . basename($arquivo["name"]);
+        // Se não conseguir fazer uploaded, lança erro
         if (!move_uploaded_file($arquivo["tmp_name"], $nomeDoArquivo)) {
             throw new Exception("Erro ao mover o arquivo. Código de erro: " . $arquivo["error"]);
         }

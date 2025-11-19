@@ -30,4 +30,17 @@ class NoticiaServico{
         $pega->bindValue(":usuario_id",$dados->getUsuarioId());
         $pega->execute();
     }
+
+    public function buscarPorId(int $idNoticia,int $idUsuario,string $tipo):?array{
+        if($tipo==="admin"){
+            $sql = "SELECT * from noticias where id=:id";
+        }else{
+            $sql = "SELECT * FROM noticias where id=:id and usuario_id =:idUsa";
+        }
+        $pega = $this->conexao->prepare($sql);
+        $pega->bindValue(":id",$idNoticia);
+        if($tipo !== "admin") $pega->bindValue(":idUsa",$idUsuario);
+        $pega->execute();
+        return $pega->fetch() ?: null;
+    }
 }

@@ -20,7 +20,14 @@ if($_SERVER['REQUEST_METHOD']==="POST"){
 			$resumo = Utils::sanitizar($_POST['resumo']);
 			//Capturamos o arquivo enviado pelo input file no html
 			$arquivo = $_FILES['imagem'];
-			Utils::testarCoisa($arquivo);
+			Utils::upload($arquivo);
+			//Pegar apenas o nome do arquivo para que seja enviados ao db  
+			$imagem=$arquivo['name'];
+
+			$noticia = new Noticia($titulo,$texto,$resumo,$imagem,$_SESSION['id']);
+
+			$noticiaServico->inserir($noticia);
+			Utils::redirecionePara("noticias.php");
 		} catch (\Throwable $e) {
 			$erro = "Erro ao inserir noticias. <br>" .$e->getMessage();
 		}
