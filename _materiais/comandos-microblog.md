@@ -5,17 +5,17 @@
 ### Criar o banco de dados
 
 ```sql
-CREATE DATABASE microblog_fullstack CHARACTER SET utf8mb4;
+CREATE DATABASE microblog_andre CHARACTER SET utf8mb4;
 ```
 
 ### Criar a tabela usuarios
 
 ```sql
 CREATE TABLE usuarios(
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
+    ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(100) NOT NULL,
+    EMAIL VARCHAR(100) NOT NULL UNIQUE,
+    SENHA VARCHAR(255) NOT NULL,
     tipo ENUM('admin', 'editor') NOT NULL
 );
 ```
@@ -23,7 +23,7 @@ CREATE TABLE usuarios(
 ### Criar a tabela noticias
 
 ```sql
-CREATE TABLE noticias(
+CREATE TABLE noticia(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(100) NOT NULL,
     resumo TEXT NOT NULL,

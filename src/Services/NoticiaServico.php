@@ -8,11 +8,26 @@ class NoticiaServico{
         $this->conexao = Conecta::getConexao();
     }
 
-    public function buscar():array{
-        $sql = "SELECT noticia.id, noticia.titulo, noticia.data, usuario.nome as autor from noticia join usuario on noticia.usuario_id = usuario.id  ORDER BY DATA DESC";
-        $pega = $this->conexao->query($sql);
+    public function buscar(string $tipo,int $id):array{
+        if($tipo === "admin"){
+            $sql = "SELECT noticias.id, noticias.titulo, noticias.data, usuario.nome as autor from noticias join usuario on noticias.usuario_id = usuario.id  ORDER BY DATA DESC";
+        }else{
+            $sql = "SELECT id,titulo, data FROM NOTICIAS where usuario_id=:id order by data desc";
+        }
+        $pega = $this->conexao->prepare($sql);
+        if($tipo !== "admin"){$pega->bindValue(":id",$id);}
+        $pega->execute();
         return $pega->fetchAll();
     }
 
-
+    public function inserir(Noticia $dados):void{
+        $sql ="INSERT INTO noticias(titulo, texto, resumo, imagem, usuario_id) VALUES (:titulo,:texto,:resumo,:imagem,:usuario_id)";
+        $pega=$this->conexao->prepare($sql);
+        $pega->bindValue(":titulo",$dados->getTitulo());
+        $pega->bindValue(":texto",$dados->getTexto());
+        $pega->bindValue(":resumo",$dados->getResumo());
+        $pega->bindValue(":imagem",$dados->getImagem());
+        $pega->bindValue(":usuario_id",$dados->getUsuarioId());
+        $pega->execute();
+    }
 }

@@ -39,4 +39,8 @@ class Utils{
             return self::codificarSenha($senhaNova);
         }
     }
+
+    public static function organizarData(string $data):string{
+        return date("d/m/Y H:i",strtotime($data));
+    }
 }
