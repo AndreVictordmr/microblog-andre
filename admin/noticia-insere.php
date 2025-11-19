@@ -1,9 +1,36 @@
 <?php
 require_once "../src/Database/Conecta.php";
+require_once "../src/Model/Noticia.php";
 require_once "../src/Helpers/Utils.php";
+require_once "../src/Services/NoticiaServico.php";
 require_once "../src/Services/AutenticacaoServico.php";
 
 AutenticacaoServico::exigirLogin();
+
+$erro = null;
+$noticiaServico = new NoticiaServico();
+
+if($_SERVER['REQUEST_METHOD']==="POST"){
+	if(empty($_POST['titulo'])|| empty($_POST['texto']) || empty($_FILES['imagem'])||empty($_POST['resumo'])){
+		$erro ="Preencha todos os campos";
+	} else{
+		try {
+			$titulo = Utils::sanitizar($_POST['titulo']);
+			$texto = Utils::sanitizar($_POST['texto']);
+			$resumo = Utils::sanitizar($_POST['resumo']);
+			//Capturamos o arquivo enviado pelo input file no html
+			$arquivo = $_FILES['imagem'];
+			Utils::testarCoisa($arquivo);
+		} catch (\Throwable $e) {
+			$erro = "Erro ao inserir noticias. <br>" .$e->getMessage();
+		}
+	}
+}
+
+
+
+
+
 require_once "../includes/cabecalho-admin.php";
 
 ?>
@@ -15,8 +42,11 @@ require_once "../includes/cabecalho-admin.php";
 		<h2 class="text-center">
 			Inserir nova notícia
 		</h2>
-
-		<form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir" autocomplete="off">
+		<?php if($erro){ ?>
+			<p class="alert alert-danger text-center"><?=$erro?></p>
+		<?php } ?>
+		<!--Obs.:é obrigatorio colocar o atributo enctype com o valor multiparte/form-data para que seu seu formulario Aceite/permite o envio de Arquivo -->
+		<form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir" autocomplete="off" enctype="multipart/form-data">
 
 			<div class="mb-3">
 				<label class="form-label" for="titulo">Título:</label>
