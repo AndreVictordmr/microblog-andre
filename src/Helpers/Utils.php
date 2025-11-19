@@ -43,4 +43,26 @@ class Utils{
     public static function organizarData(string $data):string{
         return date("d/m/Y H:i",strtotime($data));
     }
+
+    public static function upload(?array $arquivo): void {
+        
+        if (!$arquivo || !isset($arquivo["tmp_name"]) ||!is_uploaded_file($arquivo["tmp_name"]) ) {
+            throw new Exception("Nenhum arquivo válido foi enviado.");
+        }
+        $pastaDeDestino = "../images/";
+        $formatosPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+        $tamanhoMaximo = 2 * 1024 * 1024; // 2MB
+        $formatoDoArquivoEnviado = mime_content_type($arquivo["tmp_name"]);
+        if (!in_array($formatoDoArquivoEnviado, $formatosPermitidos)) {
+            throw new Exception("Apenas arquivos JPG, PNG, GIF e SVG são permitidos.");
+        }
+        if ($arquivo["size"] > $tamanhoMaximo) {
+            throw new Exception("O arquivo é muito grande. Tamanho máximo: 2MB.");
+        }
+        $nomeDoArquivo = $pastaDeDestino . basename($arquivo["name"]);
+        if (!move_uploaded_file($arquivo["tmp_name"], $nomeDoArquivo)) {
+            throw new Exception("Erro ao mover o arquivo. Código de erro: " . $arquivo["error"]);
+        }
+    }
+ 
 }
