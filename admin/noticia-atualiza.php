@@ -19,21 +19,43 @@ if(!$id) Utils::redirecionePara("noticiais.php");
 try {
     $dados=$noticiaServico->buscarPorId($id, $_SESSION['id'], $_SESSION['tipo']);
     if(!$dados) $erro="Noticia não encontrada";
-    if($_SERVER['REQUEST_METHOD']==="POST"){
-        $titulo=$_POST['titulo'];
-        $texto=$_POST['texto'];
-        $resumo=$_POST['resumo'];
-        $arquivo = $_FILES['imagem'];
-        $imagem=$arquivo['name'];
-
-        $noticia = new Noticia($titulo,$texto,$resumo,$imagem,$_SESSION['id']);
-
-        $noticiaServico->atualizar($noticia,$_SESSION['tipo']);
-
-        Utils::redirecionePara("noticias.php");
-    }
 } catch (\Throwable $e) {
     $erro="Erro ao buscar dados da noticia. <br>".$e->getMessage();
+}
+
+if($_SERVER['REQUEST_METHOD']==="POST"){
+if(empty($_POST['titulo'])|| empty($_POST['texto']) ||empty($_POST['resumo'])){
+		$erro ="Preencha todos os campos";
+	} else{
+		try {
+			$titulo = Utils::sanitizar($_POST['titulo']);
+			$texto = Utils::sanitizar($_POST['texto']);
+			$resumo = Utils::sanitizar($_POST['resumo']);
+			
+			$arquivo = $_FILES['imagem'];
+
+            /*Se o usuario enviar uma nova imagem e se nao possue erro no envio fazemos um novo upload caso contrario mantemos a mesma imagem */
+            Utils::testarCoisa($arquivo);
+            if(!empty($arquivo) && $arquivo['error']===UPLOAD_ERR_OK){
+                //vamos fazer um novo upload
+                Utils::upload($arquivo);
+                $imagem=$arquivo['name'];
+
+            }else{
+                $imagem=$dados['imagem'];
+            }
+			 
+			
+            $noticia = new Noticia($titulo,$texto,$resumo,$imagem,$_SESSION['id'],$id);
+        
+            $noticiaServico->atualizar($noticia,$_SESSION['tipo']);
+        
+            Utils::redirecionePara("noticias.php");
+			
+		} catch (\Throwable $e) {
+			$erro = "Erro ao atualizar noticias. <br>" .$e->getMessage();
+		}
+	}
 }
 
 require_once "../includes/cabecalho-admin.php";
@@ -50,34 +72,34 @@ require_once "../includes/cabecalho-admin.php";
 		<?php if($erro){ ?>
 			<p class="alert alert-danger text-center"><?=$erro?></p>
 		<?php } ?>
-        <form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="form-atualizar" autocomplete="off">
+        <form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="form-atualizar" autocomplete="off" enctype="multipart/form-data">
             <input type="hidden" name="id" value="id da notícia...">
 
             <div class="mb-3">
                 <label class="form-label" for="titulo">Título:</label>
-                <input value="titulo da notícia..." class="form-control" type="text" id="titulo" name="titulo">
+                <input value="<?= $dados['titulo'] ?>" class="form-control" type="text" id="titulo" name="titulo">
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="texto">Texto:</label>
-                <textarea class="form-control" name="texto" id="texto" cols="50" rows="6">texto da notícia...</textarea>
+                <textarea class="form-control" name="texto" id="texto" cols="50" rows="6"><?= $dados['texto'] ?></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="resumo">Resumo (máximo de 300 caracteres):</label>
                 <span id="maximo" class="badge bg-danger">0</span>
-                <textarea class="form-control" name="resumo" id="resumo" cols="50" rows="2" maxlength="300">resumo da notícia...</textarea>
+                <textarea class="form-control" name="resumo" id="resumo" cols="50" rows="2" maxlength="300"><?= $dados['resumo'] ?></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="imagem-existente" class="form-label">Imagem da notícia:</label>
                 <!-- campo somente leitura, meramente informativo -->
-                <input value="imagem da notícia..." class="form-control" type="text" id="imagem-existente" name="imagem-existente" readonly>
+                <input value="<?= $dados['imagem'] ?>" class="form-control" type="text" id="imagem-existente" name="imagem-existente" readonly>
             </div>
 
             <div class="mb-3">
                 <label for="imagem" class="form-label">Caso queira mudar, selecione outra imagem:</label>
-                <input class="form-control" type="file" id="imagem" name="imagem" accept="image/png, image/jpeg, image/gif, image/svg+xml">
+                <input class="form-control" type="file" id="imagem" name="imagem" accept="image/png, image/jpeg, image/gif, image/svg+xml" >
             </div>
 
             <button class="btn btn-primary" name="atualizar"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>

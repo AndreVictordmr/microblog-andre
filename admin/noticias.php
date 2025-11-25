@@ -65,7 +65,7 @@ require_once "../includes/cabecalho-admin.php";
 						</td>
 						<td>
 							<a class="btn btn-danger excluir" 
-							href="noticia-exclui.php<?= $noticia['id'] ?>">
+							href="noticia-exclui.php?id=<?= $noticia['id'] ?>">
 							<i class="bi bi-trash"></i> Excluir
 							</a>
 						</td>

@@ -20,6 +20,15 @@ class NoticiaServico{
         return $pega->fetchAll();
     }
 
+    public function mostrarNoticia(int $id):array{
+        $sql = "SELECT noticias.id, noticias.titulo, noticias.data, usuario.nome, noticias.imagem,noticias.texto,noticias.resumo as autor from noticias join usuario on noticias.usuario_id = usuario.id  where id=:id";
+
+        $pega = $this->conexao->prepare($sql);
+        $pega->bindValue(":id",$id);
+        $pega->execute();
+        return $pega->fetch();
+    }
+
     public function inserir(Noticia $dados):void{
         $sql ="INSERT INTO noticias(titulo, texto, resumo, imagem, usuario_id) VALUES (:titulo,:texto,:resumo,:imagem,:usuario_id)";
         $pega=$this->conexao->prepare($sql);
