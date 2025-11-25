@@ -43,4 +43,35 @@ class NoticiaServico{
         $pega->execute();
         return $pega->fetch() ?: null;
     }
+
+    public function atualizar(Noticia $noticia, string $tipo):void{
+        if($tipo==="admin"){
+            $sql="UPDATE noticias set titulo=:titulo,texto=:texto,resumo=:resumo,imagem=:imagem where id=:id";
+        }else{
+            $sql="UPDATE noticias set titulo=:titulo,texto=:texto,resumo=:resumo,imagem=:imagem where id=:id and usuario_id = :valor";
+        }
+        $pega=$this->conexao->prepare($sql);
+        $pega->bindValue(":titulo",$noticia->getTitulo());
+        $pega->bindValue(":titulo",$noticia->getTitulo());
+        $pega->bindValue(":texto",$noticia->getTexto());
+        $pega->bindValue(":resumo",$noticia->getResumo());
+        $pega->bindValue(":imagem",$noticia->getImagem());
+        $pega->bindValue(":id",$noticia->getId());
+        if($tipo !=="admin") $pega->bindValue(":valor",$noticia->getUsuarioId());
+        $pega->execute();
+
+    }
+    
+    public function excluir(int $id,int $UsaId, string $tipo):void{
+        if($tipo ==="admin"){
+            $sql="DELETE FROM noticias where id=:id";
+        }else{
+            $sql="DELETE from noticias where id=:id and usuarios_id=:valor";
+        }
+        $pega=$this->conexao->prepare($sql);
+
+        $pega->bindValue(":id",$id);
+        if($tipo !=="admin") $pega->bindValue(":valor",$UsaId);
+        $pega->execute();
+    }
 }

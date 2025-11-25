@@ -19,6 +19,19 @@ if(!$id) Utils::redirecionePara("noticiais.php");
 try {
     $dados=$noticiaServico->buscarPorId($id, $_SESSION['id'], $_SESSION['tipo']);
     if(!$dados) $erro="Noticia não encontrada";
+    if($_SERVER['REQUEST_METHOD']==="POST"){
+        $titulo=$_POST['titulo'];
+        $texto=$_POST['texto'];
+        $resumo=$_POST['resumo'];
+        $arquivo = $_FILES['imagem'];
+        $imagem=$arquivo['name'];
+
+        $noticia = new Noticia($titulo,$texto,$resumo,$imagem,$_SESSION['id']);
+
+        $noticiaServico->atualizar($noticia,$_SESSION['tipo']);
+
+        Utils::redirecionePara("noticias.php");
+    }
 } catch (\Throwable $e) {
     $erro="Erro ao buscar dados da noticia. <br>".$e->getMessage();
 }
