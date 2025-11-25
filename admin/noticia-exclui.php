@@ -38,7 +38,7 @@ require_once "../includes/cabecalho-admin.php";
 			<p class="alert alert-success text-center"><?=$sucesso?></p>
 		<?php } ?>
 			
-
+		<a href="noticias.php" class="btn btn-primary">Voltar</a>	
 	</article>
 </div>
 

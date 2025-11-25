@@ -20,13 +20,19 @@ class NoticiaServico{
         return $pega->fetchAll();
     }
 
-    public function mostrarNoticia(int $id):array{
-        $sql = "SELECT noticias.id, noticias.titulo, noticias.data, usuario.nome, noticias.imagem,noticias.texto,noticias.resumo as autor from noticias join usuario on noticias.usuario_id = usuario.id  where id=:id";
+    public function mostrarNoticiaPorId(int $id):array{
+        $sql = "SELECT noticias.id, noticias.titulo, noticias.data, usuario.nome as autor, noticias.imagem,noticias.texto  from noticias join usuario on noticias.usuario_id = usuario.id  where noticias.id=:id";
 
         $pega = $this->conexao->prepare($sql);
         $pega->bindValue(":id",$id);
         $pega->execute();
         return $pega->fetch();
+    }
+    public function mostrarNoticia():array{
+        $sql = "SELECT noticias.id, noticias.titulo, noticias.resumo , noticias.imagem from noticias join usuario on noticias.usuario_id = usuario.id  order by data desc";
+
+        $pega = $this->conexao->query($sql);
+        return $pega->fetchall();
     }
 
     public function inserir(Noticia $dados):void{
@@ -75,7 +81,7 @@ class NoticiaServico{
         if($tipo ==="admin"){
             $sql="DELETE FROM noticias where id=:id";
         }else{
-            $sql="DELETE from noticias where id=:id and usuarios_id=:valor";
+            $sql="DELETE from noticias where id=:id and usuario_id=:valor";
         }
         $pega=$this->conexao->prepare($sql);
 
