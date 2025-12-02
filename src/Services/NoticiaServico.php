@@ -19,7 +19,7 @@ class NoticiaServico{
         $pega->execute();
         return $pega->fetchAll();
     }
-
+    /*Area publica */
     public function mostrarNoticiaPorId(int $id):array{
         $sql = "SELECT noticias.id, noticias.titulo, noticias.data, usuario.nome as autor, noticias.imagem,noticias.texto  from noticias join usuario on noticias.usuario_id = usuario.id  where noticias.id=:id";
 
@@ -28,13 +28,14 @@ class NoticiaServico{
         $pega->execute();
         return $pega->fetch();
     }
+    
     public function mostrarNoticia():array{
-        $sql = "SELECT noticias.id, noticias.titulo, noticias.resumo , noticias.imagem from noticias join usuario on noticias.usuario_id = usuario.id  order by data desc";
+        $sql = "SELECT id, titulo, resumo , imagem from noticias order by data desc";
 
         $pega = $this->conexao->query($sql);
         return $pega->fetchall();
     }
-
+    /* Fim Area publica */
     public function inserir(Noticia $dados):void{
         $sql ="INSERT INTO noticias(titulo, texto, resumo, imagem, usuario_id) VALUES (:titulo,:texto,:resumo,:imagem,:usuario_id)";
         $pega=$this->conexao->prepare($sql);

@@ -4,13 +4,22 @@ require_once "src/Model/Noticia.php";
 require_once "src/Helpers/Utils.php";
 require_once "src/Services/NoticiaServico.php";
 
-$noticiaServico = new NoticiaServico();
-$noticias = $noticiaServico->mostrarNoticia();
 
+$erro = null;
+$noticias = [];
+$noticiaServico = new NoticiaServico();
+try {
+    //code...
+    $noticias = $noticiaServico->mostrarNoticia();
+} catch (\Throwable $e) {
+    $erro = 'Erro ao pegar as noticias. <br>'.$e->getMessage();
+}
 
 require_once "includes/cabecalho.php";
 ?>
-
+<?php if ($erro): ?>
+			<p class="alert alert-danger text-center"> <?= $erro ?> </p>
+<?php endif; ?>
 <div class="row my-1 mx-md-n1">
 
     <!-- INÍCIO Card -->
